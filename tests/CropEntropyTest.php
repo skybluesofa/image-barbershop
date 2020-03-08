@@ -1,12 +1,10 @@
 <?php
+namespace Skybluesofa\ImageBarbershop\Tests;
 
-require_once 'src/stojg/crop/Crop.php';
-require_once 'src/stojg/crop/CropCenter.php';
-require_once 'src/stojg/crop/CropEntropy.php';
+use Skybluesofa\ImageBarbershop\Cuts\CropEntropy;
 
-use stojg\crop\CropEntropy;
-
-class ClassEntropyTest extends PHPUnit_Framework_TestCase {
+class ClassEntropyTest extends PHPUnit_Framework_TestCase
+{
     
     const EXAMPLE_IMAGE = '/images/side.png';
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace stojg\crop;
+namespace Skybluesofa\ImageBarbershop\Cuts;
 
 /**
  *
@@ -30,6 +30,9 @@ abstract class Crop
      */
     protected $baseDimension;
 
+    protected $targetWidth;
+    protected $targetHeight;
+
     /**
      * Profiling method
      */
@@ -52,14 +55,23 @@ abstract class Crop
 
     /**
      *
-     * @param string $imagePath - The path to an image to load. Paths can include wildcards for file names,
-     *							  or can be URLs.
+     * @param string $imagePath - The path to an image to load. Paths can include wildcards for file names, or can be URLs.
      */
-    public function __construct($imagePath = null)
+    public function on(?string $imagePath = null) : self
     {
         if ($imagePath) {
             $this->setImage(new \Imagick($imagePath));
         }
+
+        return $this;
+    }
+
+    public function toSize(int $targetWidth, int $targetHeight) : self
+    {
+        $this->targetWidth = $targetWidth;
+        $this->targetHeight = $targetHeight;
+        
+        return $this;
     }
 
     /**
@@ -99,16 +111,23 @@ abstract class Crop
      * @param  int              $targetHeight
      * @return boolean|\Imagick
      */
-    public function resizeAndCrop($targetWidth, $targetHeight)
+    public function getResults(?int $targetWidth = null, ?int $targetHeight = null)
     {
+        if (!is_null($targetWidth)) {
+            $this->targetWidth = $targetWidth;
+        }
+        if (!is_null($targetHeight)) {
+            $this->targetHeight = $targetHeight;
+        }
+
         // First get the size that we can use to safely trim down the image without cropping any sides
-        $crop = $this->getSafeResizeOffset($this->originalImage, $targetWidth, $targetHeight);
+        $crop = $this->getSafeResizeOffset($this->originalImage, $this->targetWidth, $this->targetHeight);
         // Resize the image
         $this->originalImage->resizeImage($crop['width'], $crop['height'], \Imagick::FILTER_CUBIC, .5);
         // Get the offset for cropping the image further
-        $offset = $this->getSpecialOffset($this->originalImage, $targetWidth, $targetHeight);
+        $offset = $this->getSpecialOffset($this->originalImage, $this->targetWidth, $this->targetHeight);
         // Crop the image
-        $this->originalImage->cropImage($targetWidth, $targetHeight, $offset['x'], $offset['y']);
+        $this->originalImage->cropImage($this->targetWidth, $this->targetHeight, $offset['x'], $offset['y']);
 
         return $this->originalImage;
     }

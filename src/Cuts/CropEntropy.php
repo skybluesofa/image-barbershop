@@ -1,9 +1,11 @@
 <?php
 
-namespace stojg\crop;
+namespace Skybluesofa\ImageBarbershop\Cuts;
+
+use \Imagick;
 
 /**
- * SlyCropEntropy
+ * CropEntropy
  *
  * This class finds the a position in the picture with the most energy in it.
  *
@@ -22,12 +24,12 @@ class CropEntropy extends Crop
     /**
      * get special offset for class
      *
-     * @param  \Imagick $original
-     * @param  int      $targetWidth
-     * @param  int      $targetHeight
+     * @param Imagick $original
+     * @param int $targetWidth
+     * @param int $targetHeight
      * @return array
      */
-    protected function getSpecialOffset(\Imagick $original, $targetWidth, $targetHeight)
+    protected function getSpecialOffset(Imagick $original, $targetWidth, $targetHeight)
     {
         return $this->getEntropyOffsets($original, $targetWidth, $targetHeight);
     }
@@ -36,12 +38,12 @@ class CropEntropy extends Crop
     /**
      * Get the topleftX and topleftY that will can be passed to a cropping method.
      *
-     * @param  \Imagick $original
-     * @param  int      $targetWidth
-     * @param  int      $targetHeight
+     * @param Imagick $original
+     * @param int $targetWidth
+     * @param int $targetHeight
      * @return array
      */
-    protected function getEntropyOffsets(\Imagick $original, $targetWidth, $targetHeight)
+    protected function getEntropyOffsets(Imagick $original, $targetWidth, $targetHeight)
     {
         $measureImage = clone($original);
         // Enhance edges
@@ -57,13 +59,13 @@ class CropEntropy extends Crop
     /**
      * Get the offset of where the crop should start
      *
-     * @param  \Imagick $image
-     * @param  int      $targetHeight
-     * @param  int      $targetHeight
-     * @param  int      $sliceSize
+     * @param Imagick $image
+     * @param int      $targetHeight
+     * @param int      $targetHeight
+     * @param int      $sliceSize
      * @return array
      */
-    protected function getOffsetFromEntropy(\Imagick $originalImage, $targetWidth, $targetHeight)
+    protected function getOffsetFromEntropy(Imagick $originalImage, $targetWidth, $targetHeight)
     {
         // The entropy works better on a blured image
         $image = clone $originalImage;
@@ -111,7 +113,7 @@ class CropEntropy extends Crop
             if (!$aSlice) {
                 $aSlice = clone $image;
                 if ($axis === 'h') {
-                    $aSlice->cropImage($originalSize, $sliceSize, $aTop, 0);
+                    $aSlice->cropImage($sliceSize, $originalSize, $aTop, 0);
                 } else {
                     $aSlice->cropImage($originalSize, $sliceSize, 0, $aTop);
                 }
@@ -121,7 +123,7 @@ class CropEntropy extends Crop
             if (!$bSlice) {
                 $bSlice = clone $image;
                 if ($axis === 'h') {
-                    $bSlice->cropImage($originalSize, $sliceSize, $aBottom - $sliceSize, 0);
+                    $bSlice->cropImage($sliceSize, $originalSize, $aBottom - $sliceSize, 0);
                 } else {
                     $bSlice->cropImage($originalSize, $sliceSize, 0, $aBottom - $sliceSize);
                 }
@@ -224,13 +226,13 @@ class CropEntropy extends Crop
      *
      * A higher value of entropy means more noise / liveliness / color / business
      *
-     * @param  \Imagick $image
+     * @param Imagick $image
      * @return float
      *
      * @see http://brainacle.com/calculating-image-entropy-with-python-how-and-why.html
      * @see http://www.mathworks.com/help/toolbox/images/ref/entropy.html
      */
-    protected function grayscaleEntropy(\Imagick $image)
+    protected function grayscaleEntropy(Imagick $image)
     {
         // The histogram consists of a list of 0-254 and the number of pixels that has that value
         $histogram = $image->getImageHistogram();
@@ -244,7 +246,7 @@ class CropEntropy extends Crop
      * If the source image is in color we need to transform RGB into a grayscale image
      * so we can calculate the entropy more performant.
      *
-     * @param  \Imagick $image
+     * @param Imagick $image
      * @return float
      */
     protected function colorEntropy(\Imagick $image)
