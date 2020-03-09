@@ -24,6 +24,9 @@
     "require": {
         "php": ">=7.2.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0 || ^9.0"
+    },    
     "autoload": {
         "psr-4": {
             "Skybluesofa\\ImageBarbershop\\": "src/"
@@ -31,7 +34,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Skybluesofa\\ImageBarbershop\\Tests": "tests/"
+            "Skybluesofa\\ImageBarbershop\\Tests\\": "tests/"
         }
     }
 }
