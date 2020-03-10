@@ -1,10 +1,10 @@
 <?php
 namespace Skybluesofa\ImageBarbershop\Tests;
 
-use Skybluesofa\ImageBarbershop\Cuts\CropEntropy;
+use Skybluesofa\ImageBarbershop\Cuts\CropCenter;
 use PHPUnit\Framework\TestCase;
 
-class ClassEntropyTest extends TestCase
+class ClassCenterTest extends TestCase
 {
     
     const EXAMPLE_IMAGE = '/images/side.png';
@@ -19,7 +19,7 @@ class ClassEntropyTest extends TestCase
             return;
         }
         $this->tempDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'croptest';
-             
+       
         if (file_exists($this->tempDir)) {
             $this->cleanup();
         }
@@ -36,10 +36,10 @@ class ClassEntropyTest extends TestCase
     
     public function testEntropy()
     {
-        $croppedImage = (new CropEntropy)->onFile(__DIR__ . self::EXAMPLE_IMAGE)->getResults(200, 200);
-        $croppedImage->writeimage($this->tempDir . DIRECTORY_SEPARATOR . 'entropy-test.png');
+        $croppedImage = (new CropCenter)->onFile(__DIR__ . self::EXAMPLE_IMAGE)->getResults(200, 200);
+        $croppedImage->writeimage($this->tempDir . DIRECTORY_SEPARATOR . 'center-test.png');
 
-        $expectedImage = new \Imagick(__DIR__ . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . 'entropy-expected.png');
+        $expectedImage = new \Imagick(__DIR__ . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . 'center-expected.png');
         $this->assertEquals($expectedImage, $croppedImage);
     }
     
@@ -47,8 +47,8 @@ class ClassEntropyTest extends TestCase
     {
         $image = new \Imagick(__DIR__ . self::EXAMPLE_IMAGE);
 
-        $croppedImage = (new CropEntropy)->onImage($image)->toSize(200, 200)->getResults();
-        $croppedImage->writeimage($this->tempDir . DIRECTORY_SEPARATOR . 'entropy-test.png');
+        $croppedImage = (new CropCenter)->onImage($image)->toSize(200, 200)->getResults();
+        $croppedImage->writeimage($this->tempDir . DIRECTORY_SEPARATOR . 'center-test.png');
 
         $this->assertSame($image, $croppedImage);
     }

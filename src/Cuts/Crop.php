@@ -57,10 +57,10 @@ abstract class Crop
      *
      * @param string $imagePath - The path to an image to load. Paths can include wildcards for file names, or can be URLs.
      */
-    public function on(?string $imagePath = null) : self
+    public function onFile(?string $imagePath = null) : self
     {
         if ($imagePath) {
-            $this->setImage(new \Imagick($imagePath));
+            $this->onImage(new \Imagick($imagePath));
         }
 
         return $this;
@@ -80,7 +80,7 @@ abstract class Crop
      * @param  \Imagick $image
      * @return null
      */
-    public function setImage(\Imagick $image)
+    public function onImage(\Imagick $image)
     {
         $this->originalImage = $image;
 
@@ -89,6 +89,8 @@ abstract class Crop
             $this->originalImage->getImageWidth(),
             $this->originalImage->getImageHeight()
         );
+
+        return $this;
     }
 
     /**
